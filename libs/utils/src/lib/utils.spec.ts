@@ -44,7 +44,7 @@ describe('Utils', () => {
     it('should return a properly formatted Item', () => {
       const item = Utils.getNormalizedItems(
         'Joint',
-        '9/14/2025',
+        new Date('9/14/2025'),
         '100;-10',
         5,
         'product'
@@ -57,8 +57,7 @@ describe('Utils', () => {
 
   describe('formatDate', () => {
     it('should format date correctly', () => {
-      console.log('TEST: ' +Utils['formatDate']('9/14/2025'))
-      expect(Utils['formatDate']('9/14/2025')).toBe('2025-09-14');
+      expect(Utils['formatDate'](new Date('9/14/2025'))).toBe('2025-09-14');
     });
   });
 
