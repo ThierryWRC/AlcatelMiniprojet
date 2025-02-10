@@ -1,20 +1,27 @@
 import { Injectable } from '@angular/core';
-import * as xlsx from 'xlsx';
+import { Item } from '@miniprojet/models';
+import { Utils } from '@miniprojet/utils';
+import * as ExcelJS from 'exceljs';
 
 @Injectable({ providedIn: 'root' })
 export class LoaderService {
-  async parseExcelFile(file: File): Promise<any[]> {
+  async parseExcelFile(file: File): Promise<Item[]> {
     return new Promise((resolve, reject) => {
+      const workbook = new ExcelJS.Workbook();
       const reader = new FileReader();
-      reader.onload = (e: any) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = xlsx.read(data, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const json = xlsx.utils.sheet_to_json(sheet);
-        resolve(json);
+
+      reader.onload = async () => {
+        const buffer = reader.result as ArrayBuffer;
+        await workbook.xlsx.load(buffer);
+        const worksheet = workbook.getWorksheet(1);
+        const lines: any[] = [];
+        if (worksheet) {
+          worksheet.eachRow((row) => {
+            lines.push(row.values);
+          });
+        }
+        resolve(Utils.normalizeData(lines));
       };
-      reader.onerror = reject;
       reader.readAsArrayBuffer(file);
     });
   }

@@ -17,7 +17,6 @@
 @if (erreur$ | async) {
 <div class="text-red-500 text-sm">{{ erreur$ | async }}</div>
 }
-<!--
-<ul>
-  <li *ngFor="let item of uploadedData">{{ item.name }} - {{ item.category }}</li>
-</ul> -->
+
+<h3 class="mt-5 mb-2">Uploaded Data:</h3>
+<pre>{{ excelData$ | async | json }}</pre>
