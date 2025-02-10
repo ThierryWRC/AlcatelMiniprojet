@@ -13,7 +13,8 @@ import { LoaderService } from '../services/loader/loader.service';
   styleUrls: ['./loader.component.scss'],
 })
 export class LoaderComponent {
-  static MESSAGE_ERREUR_FICHIER = 'Aucun fichier sélectionné';
+  static FILE_ERROR = 'No file selected';
+  static HTTP_ERROR = 'Data writing impossible';
 
   private readonly _loader: LoaderService = inject(LoaderService);
   private readonly _api: ApiService = inject(ApiService);
@@ -31,19 +32,22 @@ export class LoaderComponent {
     this._bsExcelData.next([]);
     this._bsErreur.next(null);
     if (!input.files || input.files.length === 0) {
-      this._bsErreur.next(LoaderComponent.MESSAGE_ERREUR_FICHIER);
+      this._bsErreur.next(LoaderComponent.FILE_ERROR);
       return;
     }
     const file: File = input.files.item(0) as File;
     if (file) {
       console.log('Uploading file:', file.name);
       const items: Item[] = await this._loader.parseExcelFile(file);
-      this._bsExcelData.next(items);
-      this._api.sendToBackend$(items).subscribe(() => {
-        console.log('Data sent to backend');
-      });
+
+      this._api.sendToBackend$(items).subscribe({next:() => {
+        this._bsExcelData.next(items);
+      }, error:() => {
+        this._bsErreur.next(LoaderComponent.HTTP_ERROR);
+      }
+    });
     } else {
-      this._bsErreur.next(LoaderComponent.MESSAGE_ERREUR_FICHIER);
+      this._bsErreur.next(LoaderComponent.FILE_ERROR);
     }
   }
 }

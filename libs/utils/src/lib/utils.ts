@@ -58,9 +58,14 @@ export class Utils {
   }
 
   // 9/14/2025 -> 2025-09-14
-  private static formatDate(date: string): string {
-    const dateParts = date.split('/');
-    return dateParts[2] + '-' + this.formatTwoDigits(dateParts[0]) + '-' + this.formatTwoDigits(dateParts[1]);
+  private static formatDate(date: Date): string {
+    if (date instanceof Date) {
+      const jour = date.getDate()
+      const mois = date.getMonth()+1;
+      return date.getFullYear() + '-' + this.formatTwoDigits(mois+'') + '-' + this.formatTwoDigits(jour+'');
+    } else {
+      return ''
+    }
   }
 
   private static normalizePrices(prices: string): number[] {
