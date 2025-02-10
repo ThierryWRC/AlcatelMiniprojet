@@ -22,7 +22,7 @@ export class Utils {
         );
       }
     });
-    return items;
+    return this.filterDoubleItems(items);
   }
 
   static getNormalizedItems(
@@ -67,5 +67,17 @@ export class Utils {
       .map((price: string) =>
         Math.max(0, parseFloat(price.replace(',', '.').trim()))
       );
+  }
+
+  private static filterDoubleItems(items: Item[]): Item[] {
+    return items.filter(
+      (item, index, array) =>
+        array.findIndex(
+          (t) =>
+            t.name === item.name &&
+            t.updated_at > item.updated_at &&
+            t.category === item.category
+        ) === -1
+    );
   }
 }
