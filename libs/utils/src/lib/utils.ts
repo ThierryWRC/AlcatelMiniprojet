@@ -2,10 +2,22 @@ import { Item } from '@miniprojet/models';
 
 export class Utils {
   static normalizeData(data: any[]): Item[] {
-    const items: Item[] = data.map(
-      (row) => new Item(row[0], row[1], row[2], row[3], 'equipment')
-    );
-    debugger;
+    const items: Item[] = [];
+    const productIndex = this.getProductHeaderRowIndex(data);
+    const equipmentIndex = this.getEquipmentHeaderRowIndex(data);
+    data.forEach((row, index) => {
+      if (
+        index > productIndex &&
+        (index < equipmentIndex || productIndex > equipmentIndex)
+      ) {
+        items.push(new Item(row[1], row[2], row[3], row[4], 'product'));
+      } else if (
+        index > equipmentIndex &&
+        (index < productIndex || equipmentIndex > productIndex)
+      ) {
+        items.push(new Item(row[1], row[2], row[3], row[4], 'equipment'));
+      }
+    });
     // const uniqueData = new Map();
     // data.forEach((row) => {
     //   const name = row['Name'];
@@ -22,8 +34,20 @@ export class Utils {
     return items;
   }
 
-  private static isHeaderRow(row: any): boolean {
-    return row;
+  private static getProductHeaderRowIndex(rows: any[]): number {
+    return rows.findIndex((row) => this.isProductHeaderRow(row));
+  }
+
+  private static isProductHeaderRow(row: any): boolean {
+    return row[1].toLowerCase() === 'name' && row[4].toLowerCase() === 'rate %';
+  }
+
+  private static getEquipmentHeaderRowIndex(rows: any[]): number {
+    return rows.findIndex((row) => this.isEquipmentHeaderRow(row));
+  }
+
+  private static isEquipmentHeaderRow(row: any): boolean {
+    return row[1].toLowerCase() === 'name' && row[4].toLowerCase() === 'rate';
   }
 
   private static formatDate(date: any): string {
