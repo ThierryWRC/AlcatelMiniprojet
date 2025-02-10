@@ -2,7 +2,8 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Item } from '@miniprojet/models';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { LoaderService } from './loader.service';
+import { ApiService } from '../services/api/api.service';
+import { LoaderService } from '../services/loader/loader.service';
 
 @Component({
   selector: 'app-loader',
@@ -15,6 +16,7 @@ export class LoaderComponent {
   static MESSAGE_ERREUR_FICHIER = 'Aucun fichier sélectionné';
 
   private readonly _loader: LoaderService = inject(LoaderService);
+  private readonly _api: ApiService = inject(ApiService);
 
   private _bsExcelData: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(
     []
@@ -37,6 +39,9 @@ export class LoaderComponent {
       console.log('Uploading file:', file.name);
       const items: Item[] = await this._loader.parseExcelFile(file);
       this._bsExcelData.next(items);
+      this._api.sendToBackend$(items).subscribe(() => {
+        console.log('Data sent to backend');
+      });
     } else {
       this._bsErreur.next(LoaderComponent.MESSAGE_ERREUR_FICHIER);
     }

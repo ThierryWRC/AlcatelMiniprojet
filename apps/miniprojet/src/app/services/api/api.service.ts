@@ -1,0 +1,22 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { Item } from '@miniprojet/models';
+import { catchError, map, Observable } from 'rxjs';
+
+@Injectable({ providedIn: 'root' })
+export class ApiService {
+  private readonly _http: HttpClient = inject(HttpClient);
+
+  sendToBackend$(items: Item[]): Observable<string> {
+    return this._http.post('http://localhost:3000/kraken', items).pipe(
+      map((response: any) => {
+        debugger;
+        return response.message;
+      }),
+      catchError((error: any) => {
+        debugger;
+        return 'Erreur';
+      })
+    );
+  }
+}

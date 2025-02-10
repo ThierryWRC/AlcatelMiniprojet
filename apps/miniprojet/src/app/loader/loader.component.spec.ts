@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ApiService } from '../services/api/api.service';
+import { LoaderService } from '../services/loader/loader.service';
 import { LoaderComponent } from './loader.component';
-import { LoaderService } from './loader.service';
 
 describe('LoaderComponent', () => {
   let component: LoaderComponent;
@@ -8,7 +9,7 @@ describe('LoaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [LoaderService],
+      providers: [LoaderService, ApiService],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoaderComponent);
