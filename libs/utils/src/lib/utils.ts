@@ -10,27 +10,18 @@ export class Utils {
         index > productIndex &&
         (index < equipmentIndex || productIndex > equipmentIndex)
       ) {
-        items.push(new Item(row[1], row[2], row[3], row[4], 'product'));
+        items.push(
+          new Item(row[1], this.formatDate(row[2]), row[3], row[4], 'product')
+        );
       } else if (
         index > equipmentIndex &&
         (index < productIndex || equipmentIndex > productIndex)
       ) {
-        items.push(new Item(row[1], row[2], row[3], row[4], 'equipment'));
+        items.push(
+          new Item(row[1], this.formatDate(row[2]), row[3], row[4], 'equipment')
+        );
       }
     });
-    // const uniqueData = new Map();
-    // data.forEach((row) => {
-    //   const name = row['Name'];
-    //   if (!name) return;
-    //   uniqueData.set(name, {
-    //     name,
-    //     updated_at: this.formatDate(row['Updated At']),
-    //     prices: this.normalizePrices(row['Prices']),
-    //     rate: row['Rate'] || 0,
-    //     category: this.detectCategory(name),
-    //   });
-    // });
-    // return Array.from(uniqueData.values());
     return items;
   }
 
