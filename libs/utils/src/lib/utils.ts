@@ -57,8 +57,10 @@ export class Utils {
     return row[1].toLowerCase() === 'name' && row[4].toLowerCase() === 'rate';
   }
 
-  private static formatDate(date: any): string {
-    return new Date(date).toISOString().split('T')[0];
+  // 9/14/2025 -> 2025-09-14
+  private static formatDate(date: string): string {
+    const dateParts = date.split('/');
+    return dateParts[2] + '-' + this.formatTwoDigits(dateParts[0]) + '-' + this.formatTwoDigits(dateParts[1]);
   }
 
   private static normalizePrices(prices: string): number[] {
@@ -79,5 +81,9 @@ export class Utils {
             t.category === item.category
         ) === -1
     );
+  }
+
+  private static formatTwoDigits(n: string): string {
+    return n.length < 2 ? '0' + n : n;
   }
 }
