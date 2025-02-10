@@ -2,7 +2,7 @@
 
 ## Prérequis
 Pour pouvoir lancer le projet, il faut une base de donnée mongodb d'installer.
-Les dépendances doivent être installé en utilisant la commande suivante.
+Les dépendances doivent être installées en utilisant la commande suivante.
 ```sh
 npm i 
 ```
@@ -28,6 +28,7 @@ MONGO_URI=mongodb://127.0.0.1:27017/kraken
 
 ## Client
 Les sources du client se trouve dans apps/miniprojet
+LE client est lancé sur l'url http://localhost:4200/
 
 La ligne de commande pour lancer le serveur est
 ```sh
