@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build: .
+    container_name: nestjs_backend
+    restart: always
+    depends_on:
+      - mongo
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/excel-import-db
+    command: ['nx', 'serve', 'backend']
+
+volumes:
+  mongo_data:
