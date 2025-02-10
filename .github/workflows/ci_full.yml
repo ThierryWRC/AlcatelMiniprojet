@@ -1,0 +1,106 @@
+name: CI FULL
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: ./.github/actions/cache-restore
+        id: cache-node-modules
+        with:
+          node-version: 20
+      - run: npm i
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: ./.github/actions/cache-restore
+        id: cache-node-modules
+        with:
+          node-version: 20
+      - run: npx nx run-many --all --target=lint --parallel
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: ./.github/actions/cache-restore
+        id: cache-node-modules
+        with:
+          node-version: 20
+      - run: npx nx run-many --all --target=test --parallel
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: ./.github/actions/cache-restore
+        id: cache-node-modules
+        with:
+          node-version: 20
+      - run: npx nx run-many --all --target=build --parallel
+
+  e2e:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+      - uses: ./.github/actions/cache-restore
+        id: cache-node-modules
+        with:
+          node-version: 20
+      - run: npx nx run-many -t e2e --all --exclude bq-links-e2e,bq-site-e2e,bq-adm-e2e,bq-app-e2e
+  #       run: npx nx e2e webapp-e2e --record --key=${{ secrets.CYPRESS_RECORD_KEY }} --browser=chrome --headed
+
+  # sonarcloud:
+  #   needs: setup
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Use Node.js 16
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 16
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         ref: ${{ github.head_ref }}
+  #         fetch-depth: 0
+  #     - uses: ./.github/actions/cache-restore
+  #       id: cache-node-modules
+  #       with:
+  #         node-version: 16
+  #     - name: create-json dev
+  #       id: create-json
+  #       uses: jsdaniell/create-json@v1.2.2
+  #       with:
+  #         name: 'bandquarters-firebase-adminsdk.dev.json'
+  #         json: '{"type": "service_account", "project_id": "${{ secrets.DEV_PROJECT_ID }}","private_key_id": "${{ secrets.DEV_PRIVATE_KEY_ID }}","private_key": "${{ secrets.DEV_PRIVATE_KEY }}","client_email": "${{ secrets.DEV_CLIENT_EMAIL }}","client_id": "${{ secrets.DEV_CLIENT_ID }}","auth_uri": "${{ secrets.DEV_AUTH_PROVIDER_URL }}", "token_uri": "${{ secrets.DEV_TOKEN_URL }}","auth_provider_x509_cert_url": "${{ secrets.DEV_AUTH_URI }}","client_x509_cert_url": "${{ secrets.DEV_CLIENT_CERT_URL }}"}'
+  #         dir: 'apps/serveur/src/environments/'
+  #     - run: npx nx run-many --all --target=test --parallel
+  #     - name: SonarCloud Scan
+  #       uses: SonarSource/sonarcloud-github-action@v1.6
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
