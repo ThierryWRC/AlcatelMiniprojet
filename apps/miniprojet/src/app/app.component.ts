@@ -1,11 +1,9 @@
-import { NgClass } from '@angular/common';
 import { Component } from '@angular/core';
+import { LoaderComponent } from './loader/loader.component';
 @Component({
-  imports: [RouterModule],
+  imports: [LoaderComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'miniprojet';
-}
+export class AppComponent {}

@@ -18,8 +18,10 @@
     "@nestjs/platform-express": "^10.0.2",
     "@tailwindcss/postcss": "^4.0.5",
     "axios": "^1.6.0",
+    "file-saver": "^2.0.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
