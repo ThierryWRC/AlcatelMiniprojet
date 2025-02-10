@@ -1,4 +1,4 @@
-import { Item } from '@miniprojet/models';
+import { CATEGORY_TYPE, Item } from '@miniprojet/models';
 
 export class Utils {
   static normalizeData(data: any[]): Item[] {
@@ -11,18 +11,34 @@ export class Utils {
         (index < equipmentIndex || productIndex > equipmentIndex)
       ) {
         items.push(
-          new Item(row[1], this.formatDate(row[2]), row[3], row[4], 'product')
+          this.getNormalizedItems(row[1], row[2], row[3], row[4], 'product')
         );
       } else if (
         index > equipmentIndex &&
         (index < productIndex || equipmentIndex > productIndex)
       ) {
         items.push(
-          new Item(row[1], this.formatDate(row[2]), row[3], row[4], 'equipment')
+          this.getNormalizedItems(row[1], row[2], row[3], row[4], 'equipment')
         );
       }
     });
     return items;
+  }
+
+  static getNormalizedItems(
+    name: string,
+    updated_at: any,
+    prices: any,
+    rate: any,
+    category: CATEGORY_TYPE
+  ): Item {
+    return new Item(
+      name,
+      this.formatDate(updated_at),
+      this.normalizePrices(prices),
+      rate,
+      category
+    );
   }
 
   private static getProductHeaderRowIndex(rows: any[]): number {
@@ -45,13 +61,11 @@ export class Utils {
     return new Date(date).toISOString().split('T')[0];
   }
 
-  private static normalizePrices(prices: any): number[] {
+  private static normalizePrices(prices: string): number[] {
     return String(prices)
-      .split(',')
-      .map((price: string) => Math.max(0, parseFloat(price.trim())));
-  }
-
-  private static detectCategory(name: string): 'product' | 'equipment' {
-    return name.toLowerCase().includes('equipment') ? 'equipment' : 'product';
+      .split(';')
+      .map((price: string) =>
+        Math.max(0, parseFloat(price.replace(',', '.').trim()))
+      );
   }
 }
