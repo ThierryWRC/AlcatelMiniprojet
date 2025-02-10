@@ -1,7 +1,13 @@
-import { utils } from './utils';
+import { Utils } from './utils';
 
-describe('utils', () => {
-  it('should work', () => {
-    expect(utils()).toEqual('utils');
+describe('Utils', () => {
+  let component: Utils;
+
+  beforeEach(() => {
+    component = new Utils();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

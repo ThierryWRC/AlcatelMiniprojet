@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { NxWelcomeComponent } from './nx-welcome.component';
-
+import { LoaderComponent } from './loader/loader.component';
 @Component({
-  imports: [NxWelcomeComponent, RouterModule],
+  imports: [LoaderComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  title = 'miniprojet';
-}
+export class AppComponent {}
