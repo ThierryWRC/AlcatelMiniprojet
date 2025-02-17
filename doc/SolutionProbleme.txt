@@ -1,0 +1,26 @@
+Pour trouver les solutions il suffit d'ajouter chaque élément une règle après l'autre.
+
+1: La fibre doit être posée avant le câble.
+fibre - câble
+
+2. Un équipement 1 doit être installé après la pose du câble
+fibre - câble - équipement 1
+
+3. Les équipements 2 doivent être installés juste après la pose de la
+fibre
+
+fibre - équipements 2 - câble - équipement 1
+
+4. Les joints peuvent seulement être installés après la pose de la fibre
+et du câble, mais ils ne peuvent pas être installés immédiatement
+après la fibre.
+
+fibre - équipements 2 - câble - équipement 1 - joints
+fibre - équipements 2 - câble - joints - équipement 1
+
+5. L'équipement 1 et l’équipement 2 ne peuvent pas être installés
+consécutivement.
+
+Cela valide les solutions:
+fibre - équipements 2 - câble - équipement 1 - joints
+fibre - équipements 2 - câble - joints - équipement 1
